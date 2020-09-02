@@ -128,7 +128,7 @@ class Renderer: NSObject {
         attribute = mdlDescriptor.attributes[2] as! MDLVertexAttribute
         attribute.name = MDLVertexAttributeColor
         let mtkBufferAllocator = MTKMeshBufferAllocator(device: device)
-        guard let url = Bundle.main.url(forResource: "blue_suzanne", withExtension: "obj") else {
+        guard let url = Bundle.main.url(forResource: "colored_suzanne", withExtension: "obj") else {
             fatalError("Unable to get URL from bundle")
         }
         let asset = MDLAsset(url: url, vertexDescriptor: mdlDescriptor, bufferAllocator: mtkBufferAllocator)
