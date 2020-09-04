@@ -45,7 +45,7 @@ vertex VertexOut vertex_function(const VertexIn vertexIn [[ stage_in ]], // vert
 {
     VertexOut out;
     out.position = uniforms.projection * uniforms.view * uniforms.model * vertexIn.position;
-    // warning: normal calculation doesn't conform to no uniform scaling
+    // warning: normal calculation doesn't conform to not uniform scaling
     out.normal = normalize(float3(uniforms.model * float4(vertexIn.normal,0)));
     out.color = vertexIn.color;
     out.worldPos = uniforms.model * vertexIn.position;

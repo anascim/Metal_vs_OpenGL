@@ -9,9 +9,10 @@
 #ifndef MAIN_H_INCLUDED
 #define MAIN_H_INCLUDED
 
-#include <iostream>
 #include <cmath>
+#include <iostream>
 #include <map>
+#include <vector>
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
@@ -22,6 +23,7 @@
 
 #include "Shader.h"
 #include "Camera.h"
+#include "ModelLoader.hpp"
 
 void processInput(GLFWwindow *window);
 void didChangeSize(GLFWwindow* window, int width, int height);
@@ -128,7 +130,7 @@ int main()
 
     glEnable(GL_DEPTH_TEST);
 
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     Shader basicShader("/Users/alexnascimento/repos/Graphics_APIs/OpenGL_Render/basic_vertex.vs", "/Users/alexnascimento/repos/Graphics_APIs/OpenGL_Render/basic_fragment.fs");
     Shader lightShader("/Users/alexnascimento/repos/Graphics_APIs/OpenGL_Render/light_vertex.vs", "/Users/alexnascimento/repos/Graphics_APIs/OpenGL_Render/light_fragment.fs");
@@ -157,6 +159,26 @@ int main()
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
+    
+    ModelLoader *model = new ModelLoader("/Users/alexnascimento/repos/Graphics_APIs/Shared/cube.obj");
+    vector<float> suzanneVertices = model->getVertices();
+//    for(float f : suzanneVertices)
+//        std::cout << "f = " << f << std::endl;
+    unsigned int suzanneVAO;
+    glGenVertexArrays(1, &suzanneVAO);
+    glBindVertexArray(suzanneVAO);
+
+    unsigned int suzanneVBO;
+    glGenBuffers(1, &suzanneVBO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, suzanneVBO);
+    glBufferData(GL_ARRAY_BUFFER, suzanneVertices.size() * sizeof(float), &suzanneVertices[0], GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) 0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) (3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    
     basicShader.use();
     basicShader.setFloat3("material.ambient", glm::vec3(0.1f, 0.1f, 0.1f));
     basicShader.setFloat3("material.diffuse", glm::vec3(1.0f, 0.6f, 0.31f));
@@ -175,9 +197,9 @@ int main()
 
         processInput(window);
 
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+        
 
         basicShader.use(); // program must be used before updating its uniforms
         glm::mat4 cubeModel = glm::mat4(1.0f);
@@ -193,7 +215,15 @@ int main()
         basicShader.setFloat3("cameraPos", camera.Position);
 
         glBindVertexArray(cubeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        //glDrawArrays(GL_TRIANGLES, 0, 36);
+        
+        basicShader.use();
+        glm::mat4 suzanneModel = glm::mat4(1.0f);
+        suzanneModel = glm::translate(suzanneModel, glm::vec3(0.0f,0.0f,-3.0f));
+        basicShader.setMat4("model", suzanneModel);
+        
+        glBindVertexArray(suzanneVAO);
+        glDrawArrays(GL_TRIANGLES, 0, suzanneVertices.size()/6);
 
         lightShader.use();
         glm::mat4 lightModel = glm::mat4(1.0f);
@@ -205,6 +235,8 @@ int main()
 
         glBindVertexArray(lightCubeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+        
+        
         
         glfwSwapBuffers(window);
         glfwPollEvents();
