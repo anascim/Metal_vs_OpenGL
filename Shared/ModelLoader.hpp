@@ -28,8 +28,7 @@ private:
 public:
     ModelLoader(const char*  modelPath)
     {
-        string modelPathString = "Shared/suzanne_triangulated.obj";
-        fstream modelFileStream(modelPathString);
+        fstream modelFileStream(modelPath);
         string line;
         cout << "trying to open: " << modelPath << endl;
         if (modelFileStream.is_open())
@@ -99,7 +98,7 @@ public:
         }
         else
         {
-            cout << "Failed to open model file at path: " << modelPathString << endl;
+            cout << "Failed to open model file at path: " << modelPath << endl;
             cout << "Current path: " << __fs::filesystem::current_path() << std::endl;
         }
     }

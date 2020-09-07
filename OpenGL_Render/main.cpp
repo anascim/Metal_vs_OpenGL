@@ -76,8 +76,15 @@ float cube_vertices[] = {
     -0.5f,  0.5f, -0.5f, 0.0f, 1.0f, 0.0f
 };
 
+glm::vec3 objPositions[] = {
+    glm::vec3(0,0,-5),
+    glm::vec3(8,0,-7),
+    glm::vec3(-8,2,0),
+    glm::vec3(0,-6,1),
+    glm::vec3(-1,-2,4)
+};
+
 glm::vec3 cubePosition = glm::vec3(0.0f, -0.4f, -3.0f);
-glm::vec3 lightCubePosition = glm::vec3(2.0f, 1.0f, -1.0f);
 
 int SCR_WIDTH = 800;
 int SCR_HEIGHT = 600;
@@ -87,7 +94,7 @@ float deltaTime = 0.0f;
 float lastTime = 0.0f;
 
 // ---- CAMERA ----
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 20.0f));
 float lastX = SCR_WIDTH/2.0f, lastY = SCR_HEIGHT/2.0f;
 bool isFirstMouseUpdate = true;
 
@@ -132,49 +139,23 @@ int main()
 
     //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    Shader basicShader("/Users/alexnascimento/repos/Graphics_APIs/OpenGL_Render/basic_vertex.vs", "/Users/alexnascimento/repos/Graphics_APIs/OpenGL_Render/basic_fragment.fs");
-    Shader lightShader("/Users/alexnascimento/repos/Graphics_APIs/OpenGL_Render/light_vertex.vs", "/Users/alexnascimento/repos/Graphics_APIs/OpenGL_Render/light_fragment.fs");
-    // ---- PERMANENT SETUP ----
-
-    unsigned int cubeVAO;
-    glGenVertexArrays(1, &cubeVAO);
-    glBindVertexArray(cubeVAO);
-
-    unsigned int VBO;
-    glGenBuffers(1, &VBO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) 0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) (3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
-    unsigned int lightCubeVAO;
-    glGenVertexArrays(1, &lightCubeVAO);
-    glBindVertexArray(lightCubeVAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) 0);
-    glEnableVertexAttribArray(0);
+    Shader basicShader("OpenGL_Render/basic_vertex.vs", "OpenGL_Render/basic_fragment.fs");
     
-    ModelLoader *model = new ModelLoader("Shared/suzanne_triangulated.obj");
-    vector<float> suzanneVertices = model->getVertexData();
-//    for(float f : suzanneVertices)
-//        std::cout << "f = " << f << std::endl;
-    unsigned int suzanneVAO;
-    glGenVertexArrays(1, &suzanneVAO);
-    glBindVertexArray(suzanneVAO);
+    // ---- PERMANENT SETUP ----
+    ModelLoader *modelLoader = new ModelLoader("Shared/teapot_triangulated.obj");
+    vector<float> modelVertices = modelLoader->getVertexData();
+    
+    unsigned int teapotVAO;
+    glGenVertexArrays(1, &teapotVAO);
+    glBindVertexArray(teapotVAO);
 
-    unsigned int suzanneVBO;
-    glGenBuffers(1, &suzanneVBO);
+    unsigned int teapotVBO;
+    glGenBuffers(1, &teapotVBO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, suzanneVBO);
-    glBufferData(GL_ARRAY_BUFFER, suzanneVertices.size() * sizeof(float), &suzanneVertices[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, teapotVBO);
+    glBufferData(GL_ARRAY_BUFFER, modelVertices.size() * sizeof(float), &modelVertices[0], GL_STATIC_DRAW);
 
-    int stride = model->getVertexLength();
+    int stride = modelLoader->getVertexLength();
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride * sizeof(float), (void *) (4 * sizeof(float)));
@@ -186,7 +167,7 @@ int main()
     basicShader.setFloat3("material.specular", glm::vec3(1.0f, 1.0f, 1.0f));
     basicShader.setFloat("material.shininess", 128.0f);
     basicShader.setFloat3("lightColor", glm::vec3(1.0f));
-    basicShader.setFloat3("lightPos", lightCubePosition);
+    basicShader.setFloat3("lightDirection", glm::vec3(-1.0f,-1.0f,-1.0f));
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     // ---- RENDER LOOP ----
@@ -198,9 +179,8 @@ int main()
 
         processInput(window);
 
-        glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+        glClearColor(0.1f, 0.2f, 0.4f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
 
         basicShader.use(); // program must be used before updating its uniforms
         glm::mat4 cubeModel = glm::mat4(1.0f);
@@ -209,35 +189,20 @@ int main()
         
         glm::mat4 view = camera.GetViewMatrix();
         basicShader.setMat4("view", view);
-
         glm::mat4 projection = glm::mat4(1.0f);
         projection = glm::perspective(glm::radians(camera.Fov), (float)windowW/(float)windowH, 0.1f, 100.0f);
         basicShader.setMat4("projection", projection);
         basicShader.setFloat3("cameraPos", camera.Position);
-
-        glBindVertexArray(cubeVAO);
-        //glDrawArrays(GL_TRIANGLES, 0, 36);
         
-        basicShader.use();
-        glm::mat4 suzanneModel = glm::mat4(1.0f);
-        suzanneModel = glm::translate(suzanneModel, glm::vec3(0.0f,0.0f,-3.0f));
-        basicShader.setMat4("model", suzanneModel);
-        
-        glBindVertexArray(suzanneVAO);
-        glDrawArrays(GL_TRIANGLES, 0, suzanneVertices.size()/6);
-
-        lightShader.use();
-        glm::mat4 lightModel = glm::mat4(1.0f);
-        lightModel = glm::translate(lightModel, lightCubePosition);
-        lightModel = glm::scale(lightModel, glm::vec3(0.2f));
-        lightShader.setMat4("model", lightModel);
-        lightShader.setMat4("view", view);
-        lightShader.setMat4("projection", projection);
-
-        glBindVertexArray(lightCubeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        
-        
+        glBindVertexArray(teapotVAO);
+        for (int i = 0; i < 5; i++)
+        {
+            glm::mat4 teapotModel = glm::mat4(1.0f);
+            teapotModel = glm::translate(teapotModel, objPositions[i]);
+            basicShader.setMat4("model", teapotModel);
+            
+            glDrawArrays(GL_TRIANGLES, 0, modelVertices.size()/6);
+        }
         
         glfwSwapBuffers(window);
         glfwPollEvents();

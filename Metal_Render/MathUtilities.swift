@@ -13,10 +13,6 @@ import simd
 
 let PI = Float.pi
 
-func getAngle(_ p1: Vec2, _ p2: Vec2) -> Float {
-    return atan2f(p2.y - p1.y, p2.x - p1.x)
-}
-
 extension float4x4 {
     init(scaleBy s: Float) {
         self.init(float4(s, 0, 0, 0),

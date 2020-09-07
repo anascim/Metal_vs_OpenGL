@@ -86,7 +86,6 @@ public:
 private:
     void updateVectors()
     {
-
         glm::vec3 front;
         front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
         front.y = sin(glm::radians(Pitch));
@@ -95,12 +94,6 @@ private:
         Front = normalize(front);
         Right = glm::normalize(glm::cross(WorldUp, -Front));
         Up = glm::normalize(glm::cross(Right, Front));
-/*
-        std::cout << "position: (" << Position.x  << ", " << Position.y << ", " << Position.z << ")\n";
-        std::cout << "front: (" << Front.x << ", " << Front.y << ", " << Front.z << ")\n";
-        std::cout << "up: (" << Up.x << ", " << Up.y << ", " << Up.z << ")\n";
-        std::cout << "right: (" << Right.x << ", " << Right.y<< ", " << Right.z << ")\n";
-*/
     }
 };
 

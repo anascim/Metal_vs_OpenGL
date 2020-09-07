@@ -31,15 +31,21 @@ struct Uniforms
 
 struct Lighting
 {
-    float3 position;
+    float3 direction; // directional light
+    float3 camPos;
+    float3 color;
+};
+
+struct Material
+{
     float3 ambient;
     float3 diffuse;
     float3 specular;
-    float3 camPos;
+    float shininnes;
 };
 
 vertex VertexOut vertex_function(const VertexIn vertexIn [[ stage_in ]], // vertexIn takes the buffer index 0
-                              constant Uniforms &uniforms [[ buffer(1) ]])
+                              constant const Uniforms &uniforms [[ buffer(1) ]])
 {
     VertexOut out;
     out.position = uniforms.projection * uniforms.view * uniforms.model * float4(vertexIn.position,1);
@@ -50,20 +56,23 @@ vertex VertexOut vertex_function(const VertexIn vertexIn [[ stage_in ]], // vert
 }
 
 fragment float4 fragment_function(const VertexOut vertexIn [[ stage_in ]],
-                                  constant Lighting &lighting [[ buffer(0) ]])
+                                  constant const Lighting &lighting [[ buffer(1) ]],
+                                  constant const Material &material [[ buffer(2) ]])
 {
     // iluminação Phong
-    float3 ambient = lighting.ambient;
+    float3 ambient = material.ambient;
     
-    float3 lightDir = normalize(float3(vertexIn.worldPos) - lighting.position);
+    float3 lightDir = normalize(lighting.direction);
     float3 diffuse = max(dot(vertexIn.normal, -lightDir),0.0);
+    diffuse *= material.diffuse;
     //diffuse = step(0.1, diffuse) * lighting.diffuse;
     
     float3 r = reflect(lightDir, vertexIn.normal);
-    float3 camDir = normalize(float3(vertexIn.worldPos) - lighting.camPos);
-    float specular = pow(max(dot(r, -camDir),0.0), 4);
+    float3 camDir = normalize(lighting.camPos - float3(vertexIn.worldPos));
+    float3 specular = pow(max(dot(camDir, r),0.0), material.shininnes);
+    specular *= material.specular;
     //specular = step(0.3, specular);
     
-    float3 finalColor = (ambient + diffuse + specular) * float3(1.0, 0.2, 0.4);
+    float3 finalColor = (diffuse + specular);//(ambient + diffuse + specular) * lighting.color;
     return float4(finalColor, 1.0);
 }

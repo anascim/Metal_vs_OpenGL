@@ -26,6 +26,7 @@
 		8C499F53250459B700C4D089 /* sphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = 8C1E1C3C2501CD9600DF150B /* sphere.obj */; };
 		8C499F5625046A3500C4D089 /* ModelLoader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8CD5DBB624FFEF7D00B5D7EE /* ModelLoader.hpp */; };
 		8C60037324E6E55200FEE463 /* Cube.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C60037224E6E55200FEE463 /* Cube.swift */; };
+		8C6693E42506CB0F0057B040 /* teapot_triangulated.obj in Resources */ = {isa = PBXBuildFile; fileRef = 8C6693E32506CB0F0057B040 /* teapot_triangulated.obj */; };
 		8CBB217F24E586A800A8AC7A /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB217E24E586A800A8AC7A /* Renderer.swift */; };
 		8CBB218324E5874A00A8AC7A /* ViewProjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB218224E5874A00A8AC7A /* ViewProjection.swift */; };
 		8CCEE18224E617780072D352 /* MathUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCEE18024E617780072D352 /* MathUtilities.swift */; };
@@ -325,6 +326,7 @@
 		8C48037124E5813F002D2403 /* type_aligned.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_aligned.hpp; sourceTree = "<group>"; };
 		8C499F4625044EAD00C4D089 /* Metal_Bridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Metal_Bridging.h; sourceTree = "<group>"; };
 		8C60037224E6E55200FEE463 /* Cube.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cube.swift; sourceTree = "<group>"; };
+		8C6693E32506CB0F0057B040 /* teapot_triangulated.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot_triangulated.obj; sourceTree = "<group>"; };
 		8CA6831A24E58AEF0084C99F /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		8CBB217E24E586A800A8AC7A /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		8CBB218224E5874A00A8AC7A /* ViewProjection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewProjection.swift; sourceTree = "<group>"; };
@@ -726,6 +728,7 @@
 			children = (
 				8C1E1C272501C5C800DF150B /* suzanne_triangulated.mtl */,
 				8C1E1C282501C5C800DF150B /* suzanne_triangulated.obj */,
+				8C6693E32506CB0F0057B040 /* teapot_triangulated.obj */,
 				8C1E1C2F2501CA1E00DF150B /* cube.mtl */,
 				8C1E1C302501CA1E00DF150B /* cube.obj */,
 				8C1E1C3B2501CD9600DF150B /* sphere.mtl */,
@@ -831,6 +834,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C6693E42506CB0F0057B040 /* teapot_triangulated.obj in Resources */,
 				8C499F4E250459B700C4D089 /* suzanne_triangulated.mtl in Resources */,
 				8C499F4F250459B700C4D089 /* suzanne_triangulated.obj in Resources */,
 				8C499F50250459B700C4D089 /* cube.mtl in Resources */,

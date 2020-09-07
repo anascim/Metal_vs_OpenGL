@@ -20,68 +20,23 @@ class Renderer: NSObject {
     
     var vertexBuffer: MTLBuffer
     var modelLoader: ModelLoader_Wrapper
-//    var vertices: [Vertex]
-//    var indexBuffer: MTLBuffer
-//    var indices: [UInt16]
     
     var cameraPosition = float3(0,0,20);
     var time: Float = 0
     
-    var testFloats: [Float] =
-    // 0, 1, 2
-        [-1.0, -1.0, 1.0, 0.0, -1.0, -1.0, 1.0, 0.0, // 0
-            -1.0,  1.0, 1.0, 0.0, -1.0,  1.0, 1.0, 0.0, // 1
-            -1.0, -1.0,-1.0, 0.0, -1.0, -1.0,-1.0, 0.0, // 2
-    //-1.0,  1.0,-1.0, -1.0,  1.0,-1.0, // 3
-    //1.0, -1.0, 1.0,  1.0, -1.0, 1.0, // 4
-    //1.0,  1.0, 1.0,  1.0,  1.0, 1.0, // 5
-    //1.0, -1.0,-1.0,  1.0, -1.0,-1.0, // 6
-    //1.0,  1.0,-1.0,  1.0,  1.0,-1.0, // 7
-    // 1, 3, 2
-            -1.0,  1.0, 1.0, 0.0, -1.0,  1.0, 1.0, 0.0,
-            -1.0,  1.0,-1.0, 0.0, -1.0,  1.0,-1.0, 0.0,
-            -1.0, -1.0,-1.0, 0.0, -1.0, -1.0,-1.0, 0.0,
-    // 3, 6, 2
-            -1.0,  1.0,-1.0, 0.0, -1.0,  1.0,-1.0, 0.0,
-            1.0, -1.0,-1.0, 0.0,  1.0, -1.0,-1.0, 0.0,
-            -1.0, -1.0,-1.0, 0.0, -1.0, -1.0,-1.0, 0.0,
-    // 3, 7, 6
-            -1.0,  1.0,-1.0, 0.0, -1.0,  1.0,-1.0, 0.0,
-            1.0,  1.0,-1.0, 0.0,  1.0,  1.0,-1.0, 0.0,
-            1.0, -1.0,-1.0, 0.0,  1.0, -1.0,-1.0, 0.0,
-    // 7, 4, 6
-            1.0,  1.0,-1.0, 0.0,  1.0,  1.0,-1.0, 0.0,
-            1.0, -1.0, 1.0, 0.0,  1.0, -1.0, 1.0, 0.0,
-            1.0, -1.0,-1.0, 0.0,  1.0, -1.0,-1.0, 0.0,
-    // 7, 5, 4
-            1.0,  1.0,-1.0, 0.0,  1.0,  1.0,-1.0, 0.0,
-            1.0,  1.0, 1.0, 0.0,  1.0,  1.0, 1.0, 0.0,
-            1.0, -1.0, 1.0, 0.0,  1.0, -1.0, 1.0, 0.0,
-    // 5, 0, 4
-            1.0,  1.0, 1.0, 0.0,  1.0,  1.0, 1.0, 0.0,
-            -1.0, -1.0, 1.0, 0.0, -1.0, -1.0, 1.0, 0.0,
-            1.0, -1.0, 1.0, 0.0,  1.0, -1.0, 1.0, 0.0,
-    // 5, 1, 0
-            1.0,  1.0, 1.0, 0.0,  1.0,  1.0, 1.0, 0.0,
-            -1.0,  1.0, 1.0, 0.0, -1.0,  1.0, 1.0, 0.0,
-            -1.0, -1.0, 1.0, 0.0, -1.0, -1.0, 1.0, 0.0,
-    // 1, 5, 7
-            -1.0,  1.0, 1.0, 0.0, -1.0,  1.0, 1.0, 0.0,
-            1.0,  1.0, 1.0, 0.0,  1.0,  1.0, 1.0, 0.0,
-            1.0,  1.0,-1.0, 0.0,  1.0,  1.0,-1.0, 0.0,
-    // 1, 7, 3
-            -1.0,  1.0, 1.0, 0.0, -1.0,  1.0, 1.0, 0.0,
-            1.0,  1.0,-1.0, 0.0,  1.0,  1.0,-1.0, 0.0,
-            -1.0,  1.0,-1.0, 0.0, -1.0,  1.0,-1.0, 0.0,
-    // 2, 6, 4
-            -1.0, -1.0,-1.0, 0.0, -1.0, -1.0,-1.0, 0.0,
-            1.0, -1.0,-1.0, 0.0,  1.0, -1.0,-1.0, 0.0,
-            1.0, -1.0, 1.0, 0.0,  1.0, -1.0, 1.0, 0.0,
-    // 2, 4, 0
-            -1.0, -1.0,-1.0, 0.0, -1.0, -1.0,-1.0, 0.0,
-            1.0, -1.0, 1.0, 0.0,  1.0, -1.0, 1.0, 0.0,
-            -1.0, -1.0, 1.0, 0.0, -1.0, -1.0, 1.0, 0.0
+    var objPositions: [float3] = [
+        [0,0,-5],
+        [8,0,-7],
+        [-8,2,0],
+        [0,-6,1],
+        [-1,-2,4],
     ]
+    
+    let viewMtx: float4x4
+    let aspect: Float
+    let projMtx: float4x4
+    var lighting: Lighting
+    
     init?(mtkView: MTKView){
         // View and Device
         self.view = mtkView
@@ -109,7 +64,7 @@ class Renderer: NSObject {
         self.depthStencilState = Renderer.buildDepthState(device: device)
         
         // Model Buffers
-        modelLoader = ModelLoader_Wrapper("./Shared/suzanne_triangulated.obj")
+        modelLoader = ModelLoader_Wrapper("./Shared/teapot_triangulated.obj")
         
         if let vbuff = device.makeBuffer(bytes: modelLoader.vertexData, length: modelLoader.vertexCount * modelLoader.vertexLength * MemoryLayout<Float>.stride, options: .cpuCacheModeWriteCombined) {
             vertexBuffer = vbuff
@@ -117,17 +72,11 @@ class Renderer: NSObject {
             fatalError("Device unable to make buffer")
         }
         
-//        print("vertex count: ", modelLoader.vertexCount)
-//        print("vertex length: ", modelLoader.vertexLength)
-        
-        let res = vertexBuffer.contents().bindMemory(to: Float.self, capacity: testFloats.count)
-        var data = [Float](repeating:0, count: testFloats.count)
-        for i in 0..<testFloats.count { data[i] = res[i] }
-        
-        for (i, v) in data.enumerated() {
-            if i % 6 == 0 { print("][")}
-            print(v)
-        }
+        // Permanent Setup
+        viewMtx = float4x4(translationBy: -cameraPosition)
+        aspect = Float(view.drawableSize.width / view.drawableSize.height)
+        projMtx = float4x4(perspectiveProjectionFov: (Float.pi)/4, aspectRatio: aspect, nearZ: 0.1, farZ: 100)
+        lighting = Lighting(direction: [-1,-1,-1], color: [1,1,1], camPos: cameraPosition)
         
         super.init()
     }
@@ -189,7 +138,7 @@ extension Renderer: MTKViewDelegate {
             return
         }
     
-        renderPassDescriptor.colorAttachments[0].clearColor = .init(red: 0.1, green: 0.3, blue: 0.2, alpha: 1.0)
+        renderPassDescriptor.colorAttachments[0].clearColor = .init(red: 0.1, green: 0.2, blue: 0.4, alpha: 1.0)
         
         if let commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {
             // Render scene
@@ -198,21 +147,18 @@ extension Renderer: MTKViewDelegate {
             commandEncoder.setDepthStencilState(depthStencilState)
             commandEncoder.setRenderPipelineState(pipelineState)
             
-            //commandEncoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
-            
-            var modelMtx = float4x4(translationBy: float3(sin(time) * 3, cos(time) * 3, 0))
-            modelMtx *= float4x4(rotationAbout: [1, 1, 0], by: time)
-            let viewMtx = float4x4(translationBy: -cameraPosition)
-            let aspect: Float  = Float(view.drawableSize.width / view.drawableSize.height)
-            let projMtx = float4x4(perspectiveProjectionFov: (Float.pi)/6, aspectRatio: aspect, nearZ: 0.1, farZ: 100)
-            var uniforms = Uniforms(model: modelMtx, view: viewMtx, projection: projMtx)
-            commandEncoder.setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.stride, index: 1)
-            var lighting = Lighting(position: [0, 20, 0], ambient: [0.2, 0, 0], diffuse: [0.5, 0.5, 0.5], specular: [0.9, 0, 0.4], camPos: [0,0,20])
-            commandEncoder.setFragmentBytes(&lighting, length: MemoryLayout<Lighting>.stride, index: 0)
-            //commandEncoder.drawIndexedPrimitives(type: .triangle, indexCount: indices.count, indexType: .uint16, indexBuffer: indexBuffer, indexBufferOffset: 0)
-            
+            commandEncoder.setFragmentBytes(&lighting, length: MemoryLayout<Lighting>.stride, index: 1)
             commandEncoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
-            commandEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: modelLoader.vertexCount)
+            
+            for p in objPositions {
+                var modelMtx = float4x4(translationBy: p)
+//                modelMtx *= float4x4(rotationAbout: [1, 1, 0], by: time)
+                var uniforms = Uniforms(model: modelMtx, view: viewMtx, projection: projMtx)
+                var material = Material(ambient: [0.1, 0.1, 0.1], diffuse: [1.0, 0.6, 0.31], specular: [1.0, 1.0, 1.0], shininnes: 128)
+                commandEncoder.setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.stride, index: 1)
+                commandEncoder.setFragmentBytes(&material, length: MemoryLayout<Material>.stride, index: 2)
+                commandEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: modelLoader.vertexCount)
+            }
             
             commandEncoder.endEncoding()
 

@@ -9,7 +9,7 @@ uniform vec3 cameraPos;
 
 // Light
 uniform vec3 lightColor;
-uniform vec3 lightPos;
+uniform vec3 lightDirection;
 
 // Material
 struct Material
@@ -25,7 +25,7 @@ void main()
 {
     vec3 ambient = material.ambient;
 
-    vec3 lightDir = normalize(WorldPos - lightPos);
+    vec3 lightDir = normalize(lightDirection);
     float nDotL = max(dot(Normal, -lightDir), 0.0f);
     vec3 diffuse = nDotL * material.diffuse;
 
