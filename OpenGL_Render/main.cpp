@@ -160,8 +160,8 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
     
-    ModelLoader *model = new ModelLoader("/Users/alexnascimento/repos/Graphics_APIs/Shared/cube.obj");
-    vector<float> suzanneVertices = model->getVertices();
+    ModelLoader *model = new ModelLoader("Shared/suzanne_triangulated.obj");
+    vector<float> suzanneVertices = model->getVertexData();
 //    for(float f : suzanneVertices)
 //        std::cout << "f = " << f << std::endl;
     unsigned int suzanneVAO;
@@ -174,9 +174,10 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, suzanneVBO);
     glBufferData(GL_ARRAY_BUFFER, suzanneVertices.size() * sizeof(float), &suzanneVertices[0], GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) 0);
+    int stride = model->getVertexLength();
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) (3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride * sizeof(float), (void *) (4 * sizeof(float)));
     glEnableVertexAttribArray(1);
     
     basicShader.use();

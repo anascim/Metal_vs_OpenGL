@@ -11,16 +11,14 @@ using namespace metal;
 
 struct VertexIn
 {
-    float4 position [[ attribute(0) ]];
+    float3 position [[ attribute(0) ]];
     float3 normal [[ attribute(1) ]];
-    float3 color [[ attribute(2) ]];
 };
 
 struct VertexOut
 {
     float4 position [[ position ]];
     float3 normal;
-    float3 color;
     float4 worldPos;
 };
 
@@ -44,11 +42,10 @@ vertex VertexOut vertex_function(const VertexIn vertexIn [[ stage_in ]], // vert
                               constant Uniforms &uniforms [[ buffer(1) ]])
 {
     VertexOut out;
-    out.position = uniforms.projection * uniforms.view * uniforms.model * vertexIn.position;
+    out.position = uniforms.projection * uniforms.view * uniforms.model * float4(vertexIn.position,1);
     // warning: normal calculation doesn't conform to not uniform scaling
     out.normal = normalize(float3(uniforms.model * float4(vertexIn.normal,0)));
-    out.color = vertexIn.color;
-    out.worldPos = uniforms.model * vertexIn.position;
+    out.worldPos = uniforms.model * float4(vertexIn.position,1);
     return out;
 }
 

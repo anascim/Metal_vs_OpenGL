@@ -13,14 +13,14 @@ struct Cube {
     
     static func buildVertices(color: SIMD3<Float>) -> [Vertex] {
         return [
-            Vertex(position: [-1.0, -1.0, 1.0], normal: [-1.0, -1.0, 1.0], color: color),
-            Vertex(position: [-1.0,  1.0, 1.0], normal: [-1.0,  1.0, 1.0], color: color),
-            Vertex(position: [-1.0, -1.0,-1.0], normal: [-1.0, -1.0,-1.0], color: color),
-            Vertex(position: [-1.0,  1.0,-1.0], normal: [-1.0,  1.0,-1.0], color: color),
-            Vertex(position: [ 1.0, -1.0, 1.0], normal: [ 1.0, -1.0, 1.0], color: color),
-            Vertex(position: [ 1.0,  1.0, 1.0], normal: [ 1.0,  1.0, 1.0], color: color),
-            Vertex(position: [ 1.0, -1.0,-1.0], normal: [ 1.0, -1.0,-1.0], color: color),
-            Vertex(position: [ 1.0,  1.0,-1.0], normal: [ 1.0,  1.0,-1.0], color: color)
+            Vertex(position: [-1.0, -1.0, 1.0], normal: [-1.0, -1.0, 1.0]),
+            Vertex(position: [-1.0,  1.0, 1.0], normal: [-1.0,  1.0, 1.0]),
+            Vertex(position: [-1.0, -1.0,-1.0], normal: [-1.0, -1.0,-1.0]),
+            Vertex(position: [-1.0,  1.0,-1.0], normal: [-1.0,  1.0,-1.0]),
+            Vertex(position: [ 1.0, -1.0, 1.0], normal: [ 1.0, -1.0, 1.0]),
+            Vertex(position: [ 1.0,  1.0, 1.0], normal: [ 1.0,  1.0, 1.0]),
+            Vertex(position: [ 1.0, -1.0,-1.0], normal: [ 1.0, -1.0,-1.0]),
+            Vertex(position: [ 1.0,  1.0,-1.0], normal: [ 1.0,  1.0,-1.0])
         ]
     }
     /*

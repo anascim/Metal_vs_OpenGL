@@ -6,9 +6,6 @@
 //  Copyright © 2020 Alex Nascimento. All rights reserved.
 //
 
-#ifndef ModelLoader_hpp
-#define ModelLoader_hpp
-
 #include <vector>
 #include <array>
 #include <fstream>
@@ -26,13 +23,15 @@ private:
     vector<array<float,N_VEC_SIZE>> vertexNormals;
     vector<uint> vertexIndices;
     vector<uint> normalIndices;
+    vector<float> vertexData;
     
 public:
-    ModelLoader(string modelPath)
+    ModelLoader(const char*  modelPath)
     {
-        string modelString;
-        fstream modelFileStream(modelPath);
+        string modelPathString = "Shared/suzanne_triangulated.obj";
+        fstream modelFileStream(modelPathString);
         string line;
+        cout << "trying to open: " << modelPath << endl;
         if (modelFileStream.is_open())
         {
             while (getline(modelFileStream, line))
@@ -57,6 +56,7 @@ public:
                         case 'f': {
                             size_t first = line.find(" ");
                             size_t second = line.find(" ", first+1);
+                            
                             while (first != line.size())
                             {
                                 string svert = line.substr(first, second-first);
@@ -95,33 +95,30 @@ public:
                 cout << "\n";
             }
             modelFileStream.close();
+            buildVertexData();
         }
         else
         {
-            cout << "Failed to open model file at path" << modelPath << endl;
-            cout << "Current path:" << __fs::filesystem::current_path() << std::endl;
+            cout << "Failed to open model file at path: " << modelPathString << endl;
+            cout << "Current path: " << __fs::filesystem::current_path() << std::endl;
         }
     }
     
     // criar uma lista de vértices com seus atributos, sem EBO
     // significa que muitos vertices serão repetidos, mas é mais simples
-    vector<float> getVertices()
+    vector<float> getVertexData()
     {
-        vector<float> vertices;
-        size_t vIndex = 0;
-        for (int j = 0; j < vertexIndices.size(); j++)
-        {
-            for (int k = 0; k < P_VEC_SIZE; k++)
-            {
-                vertices.push_back(vertexPositions[vertexIndices[vIndex]-1][k]);
-            }
-            for (int k = 0; k < N_VEC_SIZE; k++)
-            {
-                vertices.push_back(vertexNormals[normalIndices[vIndex]-1][k]);
-            }
-            vIndex++;
-        }
-        return vertices;
+        return vertexData;
+    }
+    
+    int getVertexLength()
+    {
+        return 8;
+    }
+    
+    int getDataLength()
+    {
+        return vertexData.size();
     }
     
     vector<array<float,3>> getPositions()
@@ -150,6 +147,25 @@ private:
         std::copy(resultvec.begin(), resultvec.end(), &resultarr[0]);
         return resultarr;
     }
+    
+    void buildVertexData()
+    {
+        vector<float> vertices;
+        size_t vIndex = 0;
+        for (int j = 0; j < vertexIndices.size(); j++)
+        {
+            for (int k = 0; k < P_VEC_SIZE; k++)
+            {
+                vertices.push_back(vertexPositions[vertexIndices[vIndex]-1][k]);
+            }
+            vertices.push_back(0.0f); // alignment
+            for (int k = 0; k < N_VEC_SIZE; k++)
+            {
+                vertices.push_back(vertexNormals[normalIndices[vIndex]-1][k]);
+            }
+            vertices.push_back(0.0f); // alignment
+            vIndex++;
+        }
+        vertexData = vertices;
+    }
 };
-
-#endif /* ModelLoader_hpp */

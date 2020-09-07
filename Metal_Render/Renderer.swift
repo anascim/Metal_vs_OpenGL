@@ -19,15 +19,69 @@ class Renderer: NSObject {
     var depthStencilState: MTLDepthStencilState
     
     var vertexBuffer: MTLBuffer
-    var vertices: [Vertex]
-    var indexBuffer: MTLBuffer
-    var indices: [UInt16]
-    
-    var meshes: [MTKMesh]
+    var modelLoader: ModelLoader_Wrapper
+//    var vertices: [Vertex]
+//    var indexBuffer: MTLBuffer
+//    var indices: [UInt16]
     
     var cameraPosition = float3(0,0,20);
     var time: Float = 0
     
+    var testFloats: [Float] =
+    // 0, 1, 2
+        [-1.0, -1.0, 1.0, 0.0, -1.0, -1.0, 1.0, 0.0, // 0
+            -1.0,  1.0, 1.0, 0.0, -1.0,  1.0, 1.0, 0.0, // 1
+            -1.0, -1.0,-1.0, 0.0, -1.0, -1.0,-1.0, 0.0, // 2
+    //-1.0,  1.0,-1.0, -1.0,  1.0,-1.0, // 3
+    //1.0, -1.0, 1.0,  1.0, -1.0, 1.0, // 4
+    //1.0,  1.0, 1.0,  1.0,  1.0, 1.0, // 5
+    //1.0, -1.0,-1.0,  1.0, -1.0,-1.0, // 6
+    //1.0,  1.0,-1.0,  1.0,  1.0,-1.0, // 7
+    // 1, 3, 2
+            -1.0,  1.0, 1.0, 0.0, -1.0,  1.0, 1.0, 0.0,
+            -1.0,  1.0,-1.0, 0.0, -1.0,  1.0,-1.0, 0.0,
+            -1.0, -1.0,-1.0, 0.0, -1.0, -1.0,-1.0, 0.0,
+    // 3, 6, 2
+            -1.0,  1.0,-1.0, 0.0, -1.0,  1.0,-1.0, 0.0,
+            1.0, -1.0,-1.0, 0.0,  1.0, -1.0,-1.0, 0.0,
+            -1.0, -1.0,-1.0, 0.0, -1.0, -1.0,-1.0, 0.0,
+    // 3, 7, 6
+            -1.0,  1.0,-1.0, 0.0, -1.0,  1.0,-1.0, 0.0,
+            1.0,  1.0,-1.0, 0.0,  1.0,  1.0,-1.0, 0.0,
+            1.0, -1.0,-1.0, 0.0,  1.0, -1.0,-1.0, 0.0,
+    // 7, 4, 6
+            1.0,  1.0,-1.0, 0.0,  1.0,  1.0,-1.0, 0.0,
+            1.0, -1.0, 1.0, 0.0,  1.0, -1.0, 1.0, 0.0,
+            1.0, -1.0,-1.0, 0.0,  1.0, -1.0,-1.0, 0.0,
+    // 7, 5, 4
+            1.0,  1.0,-1.0, 0.0,  1.0,  1.0,-1.0, 0.0,
+            1.0,  1.0, 1.0, 0.0,  1.0,  1.0, 1.0, 0.0,
+            1.0, -1.0, 1.0, 0.0,  1.0, -1.0, 1.0, 0.0,
+    // 5, 0, 4
+            1.0,  1.0, 1.0, 0.0,  1.0,  1.0, 1.0, 0.0,
+            -1.0, -1.0, 1.0, 0.0, -1.0, -1.0, 1.0, 0.0,
+            1.0, -1.0, 1.0, 0.0,  1.0, -1.0, 1.0, 0.0,
+    // 5, 1, 0
+            1.0,  1.0, 1.0, 0.0,  1.0,  1.0, 1.0, 0.0,
+            -1.0,  1.0, 1.0, 0.0, -1.0,  1.0, 1.0, 0.0,
+            -1.0, -1.0, 1.0, 0.0, -1.0, -1.0, 1.0, 0.0,
+    // 1, 5, 7
+            -1.0,  1.0, 1.0, 0.0, -1.0,  1.0, 1.0, 0.0,
+            1.0,  1.0, 1.0, 0.0,  1.0,  1.0, 1.0, 0.0,
+            1.0,  1.0,-1.0, 0.0,  1.0,  1.0,-1.0, 0.0,
+    // 1, 7, 3
+            -1.0,  1.0, 1.0, 0.0, -1.0,  1.0, 1.0, 0.0,
+            1.0,  1.0,-1.0, 0.0,  1.0,  1.0,-1.0, 0.0,
+            -1.0,  1.0,-1.0, 0.0, -1.0,  1.0,-1.0, 0.0,
+    // 2, 6, 4
+            -1.0, -1.0,-1.0, 0.0, -1.0, -1.0,-1.0, 0.0,
+            1.0, -1.0,-1.0, 0.0,  1.0, -1.0,-1.0, 0.0,
+            1.0, -1.0, 1.0, 0.0,  1.0, -1.0, 1.0, 0.0,
+    // 2, 4, 0
+            -1.0, -1.0,-1.0, 0.0, -1.0, -1.0,-1.0, 0.0,
+            1.0, -1.0, 1.0, 0.0,  1.0, -1.0, 1.0, 0.0,
+            -1.0, -1.0, 1.0, 0.0, -1.0, -1.0, 1.0, 0.0
+    ]
     init?(mtkView: MTKView){
         // View and Device
         self.view = mtkView
@@ -54,17 +108,25 @@ class Renderer: NSObject {
         }
         self.depthStencilState = Renderer.buildDepthState(device: device)
         
-        meshes = Renderer.loadMeshes(device: device, vertexDescriptor: vertexDescriptor)
+        // Model Buffers
+        modelLoader = ModelLoader_Wrapper("./Shared/suzanne_triangulated.obj")
         
-        // Buffers
-        vertices = Cube.buildVertices(color: [0.8, 0.3, 0.0])
-        indices = Cube.buildIndices()
-        if let vbuff = device.makeBuffer(bytes: vertices, length: MemoryLayout<Vertex>.stride * vertices.count, options: .cpuCacheModeWriteCombined),
-            let ibuff = device.makeBuffer(bytes: indices, length: MemoryLayout<UInt16>.stride * indices.count, options: .cpuCacheModeWriteCombined) {
+        if let vbuff = device.makeBuffer(bytes: modelLoader.vertexData, length: modelLoader.vertexCount * modelLoader.vertexLength * MemoryLayout<Float>.stride, options: .cpuCacheModeWriteCombined) {
             vertexBuffer = vbuff
-            indexBuffer = ibuff
         } else {
             fatalError("Device unable to make buffer")
+        }
+        
+//        print("vertex count: ", modelLoader.vertexCount)
+//        print("vertex length: ", modelLoader.vertexLength)
+        
+        let res = vertexBuffer.contents().bindMemory(to: Float.self, capacity: testFloats.count)
+        var data = [Float](repeating:0, count: testFloats.count)
+        for i in 0..<testFloats.count { data[i] = res[i] }
+        
+        for (i, v) in data.enumerated() {
+            if i % 6 == 0 { print("][")}
+            print(v)
         }
         
         super.init()
@@ -76,12 +138,9 @@ class Renderer: NSObject {
         vertexDescriptor.attributes[0].offset = 0
         vertexDescriptor.attributes[0].bufferIndex = 0
         vertexDescriptor.attributes[1].format = .float3
-        vertexDescriptor.attributes[1].offset = MemoryLayout<SIMD3<Float>>.stride
+        vertexDescriptor.attributes[1].offset = MemoryLayout<float3>.stride
         vertexDescriptor.attributes[1].bufferIndex = 0
-        vertexDescriptor.attributes[2].format = .float3
-        vertexDescriptor.attributes[2].offset = MemoryLayout<SIMD3<Float>>.stride * 2
-        vertexDescriptor.attributes[2].bufferIndex = 0
-        vertexDescriptor.layouts[0].stride = MemoryLayout<Vertex>.stride
+        vertexDescriptor.layouts[0].stride = MemoryLayout<float3>.stride * 2
         return vertexDescriptor
     }
     
@@ -116,32 +175,6 @@ class Renderer: NSObject {
         if let state = device.makeDepthStencilState(descriptor: depthStencilDescriptor) {
             return state
         } else { fatalError("StandardPipeline:buildDepthState() device returned nil DepthStencilState!") }
-    }
-    
-    static func loadMeshes(device: MTLDevice, vertexDescriptor: MTLVertexDescriptor) -> [MTKMesh] {
-        
-        let mdlDescriptor = MTKModelIOVertexDescriptorFromMetal(vertexDescriptor)
-        var attribute = mdlDescriptor.attributes[0] as! MDLVertexAttribute
-        attribute.name = MDLVertexAttributePosition
-        attribute = mdlDescriptor.attributes[1] as! MDLVertexAttribute
-        attribute.name = MDLVertexAttributeNormal
-        attribute = mdlDescriptor.attributes[2] as! MDLVertexAttribute
-        attribute.name = MDLVertexAttributeColor
-        let mtkBufferAllocator = MTKMeshBufferAllocator(device: device)
-        guard let url = Bundle.main.url(forResource: "suzanne", withExtension: "obj") else {
-            fatalError("Unable to get URL from bundle")
-        }
-        let asset = MDLAsset(url: url, vertexDescriptor: mdlDescriptor, bufferAllocator: mtkBufferAllocator)
-        
-//        guard let mesh = asset.object(at: 0) as? MDLMesh else {
-//            fatalError("Mesh not found")
-//        }
-        do {
-            let (_, meshes) = try MTKMesh.newMeshes(asset: asset, device: device)
-            return meshes
-        } catch {
-            fatalError("Couldn't create meshes\(error)")
-        }
     }
 }
 
@@ -178,17 +211,8 @@ extension Renderer: MTKViewDelegate {
             commandEncoder.setFragmentBytes(&lighting, length: MemoryLayout<Lighting>.stride, index: 0)
             //commandEncoder.drawIndexedPrimitives(type: .triangle, indexCount: indices.count, indexType: .uint16, indexBuffer: indexBuffer, indexBufferOffset: 0)
             
-            
-            
-            guard let mesh = meshes.first else {
-                fatalError("Mesh not found.")
-            }
-            let vertexBuffer = mesh.vertexBuffers[0]
-            commandEncoder.setVertexBuffer(vertexBuffer.buffer, offset: vertexBuffer.offset, index: 0)
-            guard let submesh = mesh.submeshes.first else {
-                fatalError("Submesh not found.")
-            }
-            commandEncoder.drawIndexedPrimitives(type: submesh.primitiveType, indexCount: submesh.indexCount, indexType: submesh.indexType, indexBuffer: submesh.indexBuffer.buffer, indexBufferOffset: submesh.indexBuffer.offset)
+            commandEncoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
+            commandEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: modelLoader.vertexCount)
             
             commandEncoder.endEncoding()
 
