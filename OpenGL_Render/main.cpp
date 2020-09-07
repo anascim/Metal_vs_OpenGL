@@ -30,52 +30,6 @@ void didChangeSize(GLFWwindow* window, int width, int height);
 void didChangeMousePosition(GLFWwindow* window, double xPos, double yPos);
 void didChangeScrollValue(GLFWwindow* window, double xOffset, double yOffset);
 
-float cube_vertices[] = {
-    // float3 position, float3 normal
-    // front
-    -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-     0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-     0.5f,  0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-     0.5f,  0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-    -0.5f,  0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-    -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-    // back
-    -0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-     0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-     0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-     0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-    -0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-    // left
-    -0.5f,  0.5f,  0.5f, -1.0f, 0.0f, 0.0f,
-    -0.5f,  0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
-    -0.5f, -0.5f,  0.5f, -1.0f, 0.0f, 0.0f,
-    -0.5f,  0.5f,  0.5f, -1.0f, 0.0f, 0.0f,
-    // right
-     0.5f,  0.5f,  0.5f, 1.0f, 0.0f, 0.0f,
-     0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
-     0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
-     0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
-     0.5f, -0.5f,  0.5f, 1.0f, 0.0f, 0.0f,
-     0.5f,  0.5f,  0.5f, 1.0f, 0.0f, 0.0f,
-    // bottom
-    -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
-     0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
-     0.5f, -0.5f,  0.5f, 0.0f, -1.0f, 0.0f,
-     0.5f, -0.5f,  0.5f, 0.0f, -1.0f, 0.0f,
-    -0.5f, -0.5f,  0.5f, 0.0f, -1.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
-    // top
-    -0.5f,  0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-     0.5f,  0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-     0.5f,  0.5f,  0.5f, 0.0f, 1.0f, 0.0f,
-     0.5f,  0.5f,  0.5f, 0.0f, 1.0f, 0.0f,
-    -0.5f,  0.5f,  0.5f, 0.0f, 1.0f, 0.0f,
-    -0.5f,  0.5f, -0.5f, 0.0f, 1.0f, 0.0f
-};
-
 glm::vec3 objPositions[] = {
     glm::vec3(0,0,-5),
     glm::vec3(8,0,-7),
@@ -100,6 +54,10 @@ bool isFirstMouseUpdate = true;
 
 int main()
 {
+    // #######################
+    // ::  INITIALIZATION   ::
+    // #######################
+    
     glfwInit();
 
     // set OpenGL version to 3.3 core profile
@@ -122,15 +80,10 @@ int main()
 
     glewInit();
     
-    // tell OpenGL to render onto the window
-    // the viewport could be smaller than the actual window.
-    // a window could have other viewports as well.
-    // (lower-left corner, width, height)
     glfwGetFramebufferSize(window, &windowW, &windowH); // needed for retina display
     glViewport(0, 0, windowW, windowH);
 
-    // Setup callbakcs
-    // update viewport on window size change
+    // ---- SETUP CALLBACKS ----
     glfwSetFramebufferSizeCallback(window, didChangeSize);
     glfwSetCursorPosCallback(window, didChangeMousePosition);
     glfwSetScrollCallback(window, didChangeScrollValue);
@@ -170,7 +123,11 @@ int main()
     basicShader.setFloat3("lightDirection", glm::vec3(-1.0f,-1.0f,-1.0f));
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    // ---- RENDER LOOP ----
+    
+    // ###################
+    // ::  RENDER LOOP  ::
+    // ###################
+    
     while(!glfwWindowShouldClose(window))
     {
         float currentTime = (float)glfwGetTime();
@@ -232,7 +189,7 @@ void processInput(GLFWwindow *window)
 }
 
 // ########################
-// ###  GLFW CALLBACKS  ###
+// ::   GLFW CALLBACKS   ::
 // ########################
 
 void didChangeSize(GLFWwindow* window, int width, int height)

@@ -141,7 +141,8 @@ extension Renderer: MTKViewDelegate {
         renderPassDescriptor.colorAttachments[0].clearColor = .init(red: 0.1, green: 0.2, blue: 0.4, alpha: 1.0)
         
         if let commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {
-            // Render scene
+            
+            // Scene setup
             commandEncoder.setFrontFacing(.counterClockwise)
             commandEncoder.setCullMode(.back)
             commandEncoder.setDepthStencilState(depthStencilState)
@@ -152,7 +153,6 @@ extension Renderer: MTKViewDelegate {
             
             for p in objPositions {
                 var modelMtx = float4x4(translationBy: p)
-//                modelMtx *= float4x4(rotationAbout: [1, 1, 0], by: time)
                 var uniforms = Uniforms(model: modelMtx, view: viewMtx, projection: projMtx)
                 var material = Material(ambient: [0.1, 0.1, 0.1], diffuse: [1.0, 0.6, 0.31], specular: [1.0, 1.0, 1.0], shininnes: 128)
                 commandEncoder.setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.stride, index: 1)

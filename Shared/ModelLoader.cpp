@@ -128,8 +128,8 @@ array<float, 3> ModelLoader::getVectorFloats(string str) {
     return resultarr;
 }
 
-// cria uma lista de vértices com seus atributos, sem EBO
-// muitos vertices serão repetidos, mas é mais simples
+// creates a list of vertices with their attributes,
+// sequentially, without indexing
 void ModelLoader::buildVertexData()
 {
     vector<float> vertices;

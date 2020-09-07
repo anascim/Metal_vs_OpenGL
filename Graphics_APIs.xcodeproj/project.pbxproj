@@ -25,7 +25,6 @@
 		8C499F52250459B700C4D089 /* sphere.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 8C1E1C3B2501CD9600DF150B /* sphere.mtl */; };
 		8C499F53250459B700C4D089 /* sphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = 8C1E1C3C2501CD9600DF150B /* sphere.obj */; };
 		8C499F5625046A3500C4D089 /* ModelLoader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8CD5DBB624FFEF7D00B5D7EE /* ModelLoader.hpp */; };
-		8C60037324E6E55200FEE463 /* Cube.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C60037224E6E55200FEE463 /* Cube.swift */; };
 		8C6693E42506CB0F0057B040 /* teapot_triangulated.obj in Resources */ = {isa = PBXBuildFile; fileRef = 8C6693E32506CB0F0057B040 /* teapot_triangulated.obj */; };
 		8CBB217F24E586A800A8AC7A /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB217E24E586A800A8AC7A /* Renderer.swift */; };
 		8CBB218324E5874A00A8AC7A /* ViewProjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB218224E5874A00A8AC7A /* ViewProjection.swift */; };
@@ -62,8 +61,6 @@
 		8C48026224E580DF002D2403 /* Shader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Shader.h; sourceTree = "<group>"; };
 		8C48026324E58100002D2403 /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
 		8C48026424E58101002D2403 /* basic_vertex.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = basic_vertex.vs; sourceTree = "<group>"; };
-		8C48026524E58101002D2403 /* light_fragment.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = light_fragment.fs; sourceTree = "<group>"; };
-		8C48026624E58101002D2403 /* light_vertex.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = light_vertex.vs; sourceTree = "<group>"; };
 		8C48026724E58101002D2403 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
 		8C48026824E58101002D2403 /* basic_fragment.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = basic_fragment.fs; sourceTree = "<group>"; };
 		8C48026C24E5813E002D2403 /* vec4.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = vec4.hpp; sourceTree = "<group>"; };
@@ -325,7 +322,6 @@
 		8C48037024E5813F002D2403 /* projection.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = projection.inl; sourceTree = "<group>"; };
 		8C48037124E5813F002D2403 /* type_aligned.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_aligned.hpp; sourceTree = "<group>"; };
 		8C499F4625044EAD00C4D089 /* Metal_Bridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Metal_Bridging.h; sourceTree = "<group>"; };
-		8C60037224E6E55200FEE463 /* Cube.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cube.swift; sourceTree = "<group>"; };
 		8C6693E32506CB0F0057B040 /* teapot_triangulated.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot_triangulated.obj; sourceTree = "<group>"; };
 		8CA6831A24E58AEF0084C99F /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		8CBB217E24E586A800A8AC7A /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
@@ -387,7 +383,6 @@
 				8CBB218224E5874A00A8AC7A /* ViewProjection.swift */,
 				8CCEE18024E617780072D352 /* MathUtilities.swift */,
 				8CCEE18124E617780072D352 /* Types.swift */,
-				8C60037224E6E55200FEE463 /* Cube.swift */,
 				8CCEE18A24E620CE0072D352 /* Shaders.metal */,
 				8C39C1ED24E57C7500ABA229 /* Assets.xcassets */,
 				8C39C1EF24E57C7500ABA229 /* Main.storyboard */,
@@ -407,8 +402,6 @@
 				8C48026324E58100002D2403 /* Shader.cpp */,
 				8C48026824E58101002D2403 /* basic_fragment.fs */,
 				8C48026424E58101002D2403 /* basic_vertex.vs */,
-				8C48026524E58101002D2403 /* light_fragment.fs */,
-				8C48026624E58101002D2403 /* light_vertex.vs */,
 				8C39C1FF24E57C9400ABA229 /* main.cpp */,
 				8C39C20B24E57DF800ABA229 /* OpenGL_Render.entitlements */,
 			);
@@ -858,7 +851,6 @@
 				8CCEE18324E617780072D352 /* Types.swift in Sources */,
 				8C1E1C4025027BEB00DF150B /* ModelLoader_Wrapper.mm in Sources */,
 				8CBB218324E5874A00A8AC7A /* ViewProjection.swift in Sources */,
-				8C60037324E6E55200FEE463 /* Cube.swift in Sources */,
 				8CCEE18224E617780072D352 /* MathUtilities.swift in Sources */,
 				8CCEE18B24E620CE0072D352 /* Shaders.metal in Sources */,
 				8C39C1EA24E57C7300ABA229 /* AppDelegate.swift in Sources */,

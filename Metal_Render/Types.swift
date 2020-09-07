@@ -11,11 +11,6 @@ import simd
 typealias float4 = SIMD4<Float>
 typealias float3 = SIMD3<Float>
 
-struct Vertex {
-    var position: SIMD3<Float>
-    var normal: SIMD3<Float>
-}
-
 public struct Uniforms {
     var model: float4x4
     var view: float4x4

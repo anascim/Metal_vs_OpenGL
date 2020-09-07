@@ -34,67 +34,14 @@ public:
     float Speed;
     float Sensitivity;
 
-    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 3.0f), float yaw = YAW, float pitch = PITCH, float fov = FOV, float speed = SPEED) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), Up(glm::vec3(0.0f, 1.0f, 0.0f)), Speed(SPEED), Sensitivity(SENSITIVITY)
-    {
-        Position = position;
-        WorldUp = Up;
-        Fov = fov;
-        Yaw = yaw;
-        Pitch = pitch;
-        Speed = speed;
-        updateVectors();
-    }
-
-
-    void ProcessMovement(int horizontal, int vertical, float deltaTime)
-    {
-        // Input is supposed to be a value from -1 to 1 on both axis
-        Position += (float) vertical * Front * deltaTime * Speed;
-        Position += (float) horizontal * Right * deltaTime * Speed;
-    }
-
-    void ProcessRotation(float xOffset, float yOffset, GLboolean constrainPitch = true)
-    {
-        Yaw += xOffset * Sensitivity;
-        Pitch += yOffset * Sensitivity;
-
-        if (constrainPitch)
-        {
-            if (Pitch > 89.0f)
-                Pitch = 89.0f;
-            else if (Pitch < -89.0f)
-                Pitch = -89.0f;
-        }
-
-        updateVectors();
-    }
-
-    void ProcessScroll(float yOffset)
-    {
-        Fov += yOffset;
-        if (Fov > MAX_FOV)
-            Fov = MAX_FOV;
-        else if (Fov < MIN_FOV)
-            Fov = MIN_FOV;
-    }
-
-    glm::mat4 GetViewMatrix()
-    {
-        return glm::lookAt(Position, Position + Front, Up);
-    }
+    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 3.0f), float yaw = YAW, float pitch = PITCH, float fov = FOV, float speed = SPEED);
+    void ProcessMovement(int horizontal, int vertical, float deltaTime);
+    void ProcessRotation(float xOffset, float yOffset, GLboolean constrainPitch = true);
+    void ProcessScroll(float yOffset);
+    glm::mat4 GetViewMatrix();
 
 private:
-    void updateVectors()
-    {
-        glm::vec3 front;
-        front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
-        front.y = sin(glm::radians(Pitch));
-        front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
-
-        Front = normalize(front);
-        Right = glm::normalize(glm::cross(WorldUp, -Front));
-        Up = glm::normalize(glm::cross(Right, Front));
-    }
+    void updateVectors();
 };
 
 #endif // CAMERA_H

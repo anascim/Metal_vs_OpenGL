@@ -6,7 +6,7 @@
 //  Copyright © 2020 Alex Nascimento. All rights reserved.
 //
 
-// This file was heavily based by this example by Warren More:
+// This file was heavily based on this example by Warren More:
 // https://github.com/metal-by-example/modern-metal/blob/master/modern-metal/modern-metal/MathUtilities.swift
 
 import simd
