@@ -18,14 +18,8 @@
 		8C48026A24E58101002D2403 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C48026724E58101002D2403 /* Camera.cpp */; };
 		8C499F15250446B200C4D089 /* ModelLoader_Wrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C1E1C4125027C2B00DF150B /* ModelLoader_Wrapper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C499F4D2504599900C4D089 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C39C1EF24E57C7500ABA229 /* Main.storyboard */; };
-		8C499F4E250459B700C4D089 /* suzanne_triangulated.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 8C1E1C272501C5C800DF150B /* suzanne_triangulated.mtl */; };
-		8C499F4F250459B700C4D089 /* suzanne_triangulated.obj in Resources */ = {isa = PBXBuildFile; fileRef = 8C1E1C282501C5C800DF150B /* suzanne_triangulated.obj */; };
-		8C499F50250459B700C4D089 /* cube.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 8C1E1C2F2501CA1E00DF150B /* cube.mtl */; };
-		8C499F51250459B700C4D089 /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 8C1E1C302501CA1E00DF150B /* cube.obj */; };
-		8C499F52250459B700C4D089 /* sphere.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 8C1E1C3B2501CD9600DF150B /* sphere.mtl */; };
-		8C499F53250459B700C4D089 /* sphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = 8C1E1C3C2501CD9600DF150B /* sphere.obj */; };
 		8C499F5625046A3500C4D089 /* ModelLoader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 8CD5DBB624FFEF7D00B5D7EE /* ModelLoader.hpp */; };
-		8C6693E42506CB0F0057B040 /* teapot_triangulated.obj in Resources */ = {isa = PBXBuildFile; fileRef = 8C6693E32506CB0F0057B040 /* teapot_triangulated.obj */; };
+		8C8DA6C42509C49F00D931E4 /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = 8C8DA6C32509C49F00D931E4 /* teapot.obj */; };
 		8CBB217F24E586A800A8AC7A /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB217E24E586A800A8AC7A /* Renderer.swift */; };
 		8CBB218324E5874A00A8AC7A /* ViewProjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB218224E5874A00A8AC7A /* ViewProjection.swift */; };
 		8CCEE18224E617780072D352 /* MathUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCEE18024E617780072D352 /* MathUtilities.swift */; };
@@ -36,12 +30,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8C1E1C272501C5C800DF150B /* suzanne_triangulated.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = suzanne_triangulated.mtl; sourceTree = "<group>"; };
-		8C1E1C282501C5C800DF150B /* suzanne_triangulated.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = suzanne_triangulated.obj; path = Shared/suzanne_triangulated.obj; sourceTree = SOURCE_ROOT; };
-		8C1E1C2F2501CA1E00DF150B /* cube.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.mtl; sourceTree = "<group>"; };
-		8C1E1C302501CA1E00DF150B /* cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
-		8C1E1C3B2501CD9600DF150B /* sphere.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sphere.mtl; sourceTree = "<group>"; };
-		8C1E1C3C2501CD9600DF150B /* sphere.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sphere.obj; sourceTree = "<group>"; };
 		8C1E1C3F25027BEB00DF150B /* ModelLoader_Wrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ModelLoader_Wrapper.mm; sourceTree = "<group>"; };
 		8C1E1C4125027C2B00DF150B /* ModelLoader_Wrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ModelLoader_Wrapper.h; sourceTree = "<group>"; };
 		8C39C1E624E57C7300ABA229 /* Metal_Render.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metal_Render.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -322,7 +310,7 @@
 		8C48037024E5813F002D2403 /* projection.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = projection.inl; sourceTree = "<group>"; };
 		8C48037124E5813F002D2403 /* type_aligned.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_aligned.hpp; sourceTree = "<group>"; };
 		8C499F4625044EAD00C4D089 /* Metal_Bridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Metal_Bridging.h; sourceTree = "<group>"; };
-		8C6693E32506CB0F0057B040 /* teapot_triangulated.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot_triangulated.obj; sourceTree = "<group>"; };
+		8C8DA6C32509C49F00D931E4 /* teapot.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot.obj; sourceTree = "<group>"; };
 		8CA6831A24E58AEF0084C99F /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		8CBB217E24E586A800A8AC7A /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		8CBB218224E5874A00A8AC7A /* ViewProjection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewProjection.swift; sourceTree = "<group>"; };
@@ -719,13 +707,7 @@
 		8CAE42D124F35CBA00DF3ED1 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				8C1E1C272501C5C800DF150B /* suzanne_triangulated.mtl */,
-				8C1E1C282501C5C800DF150B /* suzanne_triangulated.obj */,
-				8C6693E32506CB0F0057B040 /* teapot_triangulated.obj */,
-				8C1E1C2F2501CA1E00DF150B /* cube.mtl */,
-				8C1E1C302501CA1E00DF150B /* cube.obj */,
-				8C1E1C3B2501CD9600DF150B /* sphere.mtl */,
-				8C1E1C3C2501CD9600DF150B /* sphere.obj */,
+				8C8DA6C32509C49F00D931E4 /* teapot.obj */,
 				8CD5DBB624FFEF7D00B5D7EE /* ModelLoader.hpp */,
 				8CD5DBB524FFEF7D00B5D7EE /* ModelLoader.cpp */,
 				8C1E1C4125027C2B00DF150B /* ModelLoader_Wrapper.h */,
@@ -827,13 +809,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C6693E42506CB0F0057B040 /* teapot_triangulated.obj in Resources */,
-				8C499F4E250459B700C4D089 /* suzanne_triangulated.mtl in Resources */,
-				8C499F4F250459B700C4D089 /* suzanne_triangulated.obj in Resources */,
-				8C499F50250459B700C4D089 /* cube.mtl in Resources */,
-				8C499F51250459B700C4D089 /* cube.obj in Resources */,
-				8C499F52250459B700C4D089 /* sphere.mtl in Resources */,
-				8C499F53250459B700C4D089 /* sphere.obj in Resources */,
+				8C8DA6C42509C49F00D931E4 /* teapot.obj in Resources */,
 				8C499F4D2504599900C4D089 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

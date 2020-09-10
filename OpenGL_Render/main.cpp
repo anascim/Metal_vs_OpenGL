@@ -95,7 +95,7 @@ int main()
     Shader basicShader("OpenGL_Render/basic_vertex.vs", "OpenGL_Render/basic_fragment.fs");
     
     // ---- PERMANENT SETUP ----
-    ModelLoader *modelLoader = new ModelLoader("Shared/teapot_triangulated.obj");
+    ModelLoader *modelLoader = new ModelLoader("Shared/teapot.obj");
     vector<float> modelVertices = modelLoader->getVertexData();
     
     unsigned int teapotVAO;
@@ -119,8 +119,9 @@ int main()
     basicShader.setFloat3("material.diffuse", glm::vec3(1.0f, 0.6f, 0.31f));
     basicShader.setFloat3("material.specular", glm::vec3(1.0f, 1.0f, 1.0f));
     basicShader.setFloat("material.shininess", 128.0f);
-    basicShader.setFloat3("lightColor", glm::vec3(1.0f));
+    
     basicShader.setFloat3("lightDirection", glm::vec3(-1.0f,-1.0f,-1.0f));
+    basicShader.setFloat3("lightColor", glm::vec3(1.0f));
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     

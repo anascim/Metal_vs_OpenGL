@@ -29,9 +29,9 @@ void main()
     float nDotL = max(dot(Normal, -lightDir), 0.0f);
     vec3 diffuse = nDotL * material.diffuse;
 
-    vec3 reflection = reflect(lightDir, Normal);
+    vec3 r = reflect(lightDir, Normal);
     vec3 camDir = normalize(cameraPos - WorldPos);
-    float vDotR = max(dot(camDir, reflection), 0.0f);
+    float vDotR = max(dot(camDir, r), 0.0f);
     vec3 specular = pow(vDotR, material.shininess) * material.specular;
 
     vec3 color = (ambient + diffuse + specular) * lightColor;

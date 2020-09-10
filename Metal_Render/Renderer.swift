@@ -64,7 +64,7 @@ class Renderer: NSObject {
         self.depthStencilState = Renderer.buildDepthState(device: device)
         
         // Model Buffers
-        modelLoader = ModelLoader_Wrapper("./Shared/teapot_triangulated.obj")
+        modelLoader = ModelLoader_Wrapper("./Shared/teapot.obj")
         
         if let vbuff = device.makeBuffer(bytes: modelLoader.vertexData, length: modelLoader.vertexCount * modelLoader.vertexLength * MemoryLayout<Float>.stride, options: .cpuCacheModeWriteCombined) {
             vertexBuffer = vbuff

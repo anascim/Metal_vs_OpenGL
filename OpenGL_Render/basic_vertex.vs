@@ -11,7 +11,9 @@ uniform mat4 projection;
 
 void main()
 {
-   Normal = mat3(transpose(inverse(model))) * aNormal; // correction for world space
+   Normal = normalize(vec3(model * vec4(aNormal,0.0))); // correction for world space
+    //a better way, but more computationaly expensive:
+   //Normal = mat3(transpose(inverse(model))) * aNormal;
    WorldPos = vec3(model * vec4(aPos, 1.0));
    gl_Position = projection * view * model * vec4(aPos, 1.0);
 }
