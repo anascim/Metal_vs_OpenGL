@@ -27,6 +27,7 @@ private:
     
 public:
     ModelLoader(const char*  modelPath);
+    ~ModelLoader();
     vector<float> getVertexData();
     int getVertexLength();
     int getDataLength();

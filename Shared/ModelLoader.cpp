@@ -30,6 +30,11 @@ ModelLoader::ModelLoader(const char*  modelPath)
                                 break;
                             case 'n':
                                 vertexNormals.push_back(getVectorFloats(line));
+                                /*
+                                 on destructor:
+                                vertexNormals.clear();
+                                vertexNormals.shrink_to_fit();
+                                 */
                                 break;
                         }
                         break;
@@ -64,6 +69,21 @@ ModelLoader::ModelLoader(const char*  modelPath)
         cout << "Current path: " << __fs::filesystem::current_path() << std::endl;
     }
 }
+
+ModelLoader::~ModelLoader()
+{
+    vertexPositions.clear();
+    vertexPositions.shrink_to_fit();
+    vertexNormals.clear();
+    vertexNormals.shrink_to_fit();
+    vertexIndices.clear();
+    vertexIndices.shrink_to_fit();
+    normalIndices.clear();
+    normalIndices.shrink_to_fit();
+    vertexData.clear();
+    vertexData.shrink_to_fit();
+}
+
 vector<float> ModelLoader::getVertexData()
 {
     return vertexData;

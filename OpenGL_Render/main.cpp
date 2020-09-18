@@ -25,12 +25,7 @@
 #include "Camera.h"
 #include "ModelLoader.hpp"
 
-void processInput(GLFWwindow *window);
-void didChangeSize(GLFWwindow* window, int width, int height);
-void didChangeMousePosition(GLFWwindow* window, double xPos, double yPos);
-void didChangeScrollValue(GLFWwindow* window, double xOffset, double yOffset);
-
-glm::vec3 objPositions[] = {
+std::vector<glm::vec3> objPositions = {
     glm::vec3(0,0,-5),
     glm::vec3(8,0,-7),
     glm::vec3(-8,2,0),
@@ -38,7 +33,45 @@ glm::vec3 objPositions[] = {
     glm::vec3(-1,-2,4)
 };
 
-glm::vec3 cubePosition = glm::vec3(0.0f, -0.4f, -3.0f);
+struct Material
+{
+    glm::vec3 ambient;
+    glm::vec3 diffuse;
+    glm::vec3 specular;
+    float shininess;
+};
+// Material values from: http://www.it.hiof.no/~borres/j3d/explain/light/p-materials.html
+Material gold {
+    glm::vec3(0.2125,    0.1275,     0.054),
+    glm::vec3(0.75164,   0.60648,    0.22648),
+    glm::vec3(0.628281,  0.555802,   0.366065),
+    51.2
+};
+Material bronze {
+    glm::vec3(0.2125,    0.1275,     0.054),
+    glm::vec3(0.714,     0.4284,     0.18144),
+    glm::vec3(0.393548,  0.271906,   0.166721),
+    25.6
+};
+Material cyanPlastic {
+    glm::vec3(0.0,        0.1,        0.06),
+    glm::vec3(0.0,        0.50980392, 0.50980392),
+    glm::vec3(0.50196078, 0.50196078, 0.50196078),
+    32.0
+};
+Material redRubber {
+    glm::vec3(0.05,       0.0,        0.0),
+    glm::vec3(0.5,        0.4,        0.4),
+    glm::vec3(0.7,        0.04,       0.04),
+    10.0
+};
+Material greenRubber {
+    glm::vec3(0.0,        0.05,       0.0),
+    glm::vec3(0.4,        0.5,        0.4),
+    glm::vec3(0.04,       0.7,        0.04),
+    10.0
+};
+vector<Material> materials = { gold, bronze, cyanPlastic, redRubber, greenRubber };
 
 int SCR_WIDTH = 800;
 int SCR_HEIGHT = 600;
@@ -48,15 +81,11 @@ float deltaTime = 0.0f;
 float lastTime = 0.0f;
 
 // ---- CAMERA ----
-Camera camera(glm::vec3(0.0f, 0.0f, 20.0f));
-float lastX = SCR_WIDTH/2.0f, lastY = SCR_HEIGHT/2.0f;
-bool isFirstMouseUpdate = true;
+glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 20.0f);
 
 int main()
 {
-    // #######################
-    // ::  INITIALIZATION   ::
-    // #######################
+    // ---- INITIALIZATION ----
     
     glfwInit();
 
@@ -82,19 +111,14 @@ int main()
     
     glfwGetFramebufferSize(window, &windowW, &windowH); // needed for retina display
     glViewport(0, 0, windowW, windowH);
-
-    // ---- SETUP CALLBACKS ----
-    glfwSetFramebufferSizeCallback(window, didChangeSize);
-    glfwSetCursorPosCallback(window, didChangeMousePosition);
-    glfwSetScrollCallback(window, didChangeScrollValue);
-
+    
+    
+    // ---- PERMANENT SETUP ----
+    
     glEnable(GL_DEPTH_TEST);
-
-    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     Shader basicShader("OpenGL_Render/basic_vertex.vs", "OpenGL_Render/basic_fragment.fs");
     
-    // ---- PERMANENT SETUP ----
     ModelLoader *modelLoader = new ModelLoader("Shared/teapot.obj");
     vector<float> modelVertices = modelLoader->getVertexData();
     
@@ -115,50 +139,37 @@ int main()
     glEnableVertexAttribArray(1);
     
     basicShader.use();
-    basicShader.setFloat3("material.ambient", glm::vec3(0.1f, 0.1f, 0.1f));
-    basicShader.setFloat3("material.diffuse", glm::vec3(1.0f, 0.6f, 0.31f));
-    basicShader.setFloat3("material.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-    basicShader.setFloat("material.shininess", 128.0f);
-    
-    basicShader.setFloat3("lightDirection", glm::vec3(-1.0f,-1.0f,-1.0f));
+    basicShader.setFloat3("lightDirection", glm::vec3(-1.0f));
     basicShader.setFloat3("lightColor", glm::vec3(1.0f));
-
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     
-    // ###################
-    // ::  RENDER LOOP  ::
-    // ###################
+    // ---- RENDER LOOP ----
     
     while(!glfwWindowShouldClose(window))
     {
-        float currentTime = (float)glfwGetTime();
-        deltaTime = currentTime - lastTime;
-        lastTime = currentTime;
-
-        processInput(window);
-
+        // Clear Background
         glClearColor(0.1f, 0.2f, 0.4f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        basicShader.use(); // program must be used before updating its uniforms
-        glm::mat4 cubeModel = glm::mat4(1.0f);
-        cubeModel = glm::translate(cubeModel, cubePosition);
-        basicShader.setMat4("model", cubeModel);
         
-        glm::mat4 view = camera.GetViewMatrix();
+        glm::mat4 view = glm::mat4(1.0f);
+        view = glm::translate(view, -cameraPosition);
         basicShader.setMat4("view", view);
         glm::mat4 projection = glm::mat4(1.0f);
-        projection = glm::perspective(glm::radians(camera.Fov), (float)windowW/(float)windowH, 0.1f, 100.0f);
+        projection = glm::perspective(glm::radians(45.0f), (float)windowW/(float)windowH, 0.1f, 100.0f);
         basicShader.setMat4("projection", projection);
-        basicShader.setFloat3("cameraPos", camera.Position);
+        basicShader.setFloat3("cameraPos", cameraPosition);
         
         glBindVertexArray(teapotVAO);
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < objPositions.size(); i++)
         {
+            int imat = i%materials.size();
+            basicShader.setFloat3("material.ambient", materials[imat].ambient);
+            basicShader.setFloat3("material.diffuse", materials[imat].diffuse);
+            basicShader.setFloat3("material.specular", materials[imat].specular);
+            basicShader.setFloat("material.shininess", materials[imat].shininess);
+            
             glm::mat4 teapotModel = glm::mat4(1.0f);
             teapotModel = glm::translate(teapotModel, objPositions[i]);
             basicShader.setMat4("model", teapotModel);
-            
             glDrawArrays(GL_TRIANGLES, 0, modelVertices.size()/6);
         }
         
@@ -174,52 +185,6 @@ void processInput(GLFWwindow *window)
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-
-    int hMove = 0;
-    int vMove = 0;
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        vMove += 1;
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        hMove -= 1;
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        vMove -= 1;
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        hMove += 1;
-
-    camera.ProcessMovement(hMove, vMove, deltaTime);
-}
-
-// ########################
-// ::   GLFW CALLBACKS   ::
-// ########################
-
-void didChangeSize(GLFWwindow* window, int width, int height)
-{
-    windowW = width;
-    windowH = height;
-    glViewport(0, 0, width, height);
-}
-
-void didChangeMousePosition(GLFWwindow* window, double xPos, double yPos)
-{
-    if (isFirstMouseUpdate)
-    {
-        lastX = xPos;
-        lastY = yPos;
-        isFirstMouseUpdate = false;
-    }
-
-    float xOffset = xPos - lastX;
-    float yOffset = lastY - yPos; // reversed since y coordinates range from bottom to top
-    lastX = xPos;
-    lastY = yPos;
-
-    camera.ProcessRotation(xOffset, yOffset);
-}
-
-void didChangeScrollValue(GLFWwindow* window, double xOffset, double yOffset)
-{
-    camera.ProcessScroll((float)yOffset);
 }
 
 #endif // MAIN_H_INCLUDED

@@ -27,5 +27,5 @@ struct Material {
     var ambient: SIMD3<Float>
     var diffuse: SIMD3<Float>
     var specular: SIMD3<Float>
-    var shininnes: Float
+    var shininess: Float
 }
