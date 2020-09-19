@@ -27,6 +27,8 @@
 		8CCEE18B24E620CE0072D352 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 8CCEE18A24E620CE0072D352 /* Shaders.metal */; };
 		8CD5DBB824FFEF7D00B5D7EE /* ModelLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CD5DBB524FFEF7D00B5D7EE /* ModelLoader.cpp */; };
 		8CD5DBB924FFEFA000B5D7EE /* ModelLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CD5DBB524FFEF7D00B5D7EE /* ModelLoader.cpp */; };
+		8CF742D52514D7EA003E6316 /* Scenes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF742D42514D7EA003E6316 /* Scenes.swift */; };
+		8CF742DD2514E723003E6316 /* Materials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF742DC2514E723003E6316 /* Materials.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -319,6 +321,10 @@
 		8CCEE18A24E620CE0072D352 /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		8CD5DBB524FFEF7D00B5D7EE /* ModelLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModelLoader.cpp; sourceTree = "<group>"; };
 		8CD5DBB624FFEF7D00B5D7EE /* ModelLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ModelLoader.hpp; sourceTree = "<group>"; };
+		8CF742D42514D7EA003E6316 /* Scenes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scenes.swift; sourceTree = "<group>"; };
+		8CF742D72514E58B003E6316 /* Scenes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Scenes.hpp; sourceTree = "<group>"; };
+		8CF742DA2514E65A003E6316 /* Materials.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Materials.hpp; sourceTree = "<group>"; };
+		8CF742DC2514E723003E6316 /* Materials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Materials.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -368,6 +374,8 @@
 				8C39C1E924E57C7300ABA229 /* AppDelegate.swift */,
 				8C39C1EB24E57C7300ABA229 /* ViewController.swift */,
 				8CBB217E24E586A800A8AC7A /* Renderer.swift */,
+				8CF742D42514D7EA003E6316 /* Scenes.swift */,
+				8CF742DC2514E723003E6316 /* Materials.swift */,
 				8CBB218224E5874A00A8AC7A /* ViewProjection.swift */,
 				8CCEE18024E617780072D352 /* MathUtilities.swift */,
 				8CCEE18124E617780072D352 /* Types.swift */,
@@ -388,6 +396,8 @@
 				8C48026724E58101002D2403 /* Camera.cpp */,
 				8C48026224E580DF002D2403 /* Shader.h */,
 				8C48026324E58100002D2403 /* Shader.cpp */,
+				8CF742D72514E58B003E6316 /* Scenes.hpp */,
+				8CF742DA2514E65A003E6316 /* Materials.hpp */,
 				8C48026824E58101002D2403 /* basic_fragment.fs */,
 				8C48026424E58101002D2403 /* basic_vertex.vs */,
 				8C39C1FF24E57C9400ABA229 /* main.cpp */,
@@ -823,6 +833,8 @@
 			files = (
 				8C39C1EC24E57C7300ABA229 /* ViewController.swift in Sources */,
 				8CBB217F24E586A800A8AC7A /* Renderer.swift in Sources */,
+				8CF742D52514D7EA003E6316 /* Scenes.swift in Sources */,
+				8CF742DD2514E723003E6316 /* Materials.swift in Sources */,
 				8CD5DBB824FFEF7D00B5D7EE /* ModelLoader.cpp in Sources */,
 				8CCEE18324E617780072D352 /* Types.swift in Sources */,
 				8C1E1C4025027BEB00DF150B /* ModelLoader_Wrapper.mm in Sources */,

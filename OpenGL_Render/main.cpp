@@ -9,6 +9,8 @@
 #ifndef MAIN_H_INCLUDED
 #define MAIN_H_INCLUDED
 
+#define SCENE5 // Set this to the wanted scene: SCENE[1...5]
+
 #include <cmath>
 #include <iostream>
 #include <map>
@@ -25,60 +27,20 @@
 #include "Camera.h"
 #include "ModelLoader.hpp"
 
-std::vector<glm::vec3> objPositions = {
-    glm::vec3(0,0,-5),
-    glm::vec3(8,0,-7),
-    glm::vec3(-8,2,0),
-    glm::vec3(0,-6,1),
-    glm::vec3(-1,-2,4)
-};
+#include "Scenes.hpp"
+#include "Materials.hpp"
 
-struct Material
-{
-    glm::vec3 ambient;
-    glm::vec3 diffuse;
-    glm::vec3 specular;
-    float shininess;
-};
-// Material values from: http://www.it.hiof.no/~borres/j3d/explain/light/p-materials.html
-Material gold {
-    glm::vec3(0.2125,    0.1275,     0.054),
-    glm::vec3(0.75164,   0.60648,    0.22648),
-    glm::vec3(0.628281,  0.555802,   0.366065),
-    51.2
-};
-Material bronze {
-    glm::vec3(0.2125,    0.1275,     0.054),
-    glm::vec3(0.714,     0.4284,     0.18144),
-    glm::vec3(0.393548,  0.271906,   0.166721),
-    25.6
-};
-Material cyanPlastic {
-    glm::vec3(0.0,        0.1,        0.06),
-    glm::vec3(0.0,        0.50980392, 0.50980392),
-    glm::vec3(0.50196078, 0.50196078, 0.50196078),
-    32.0
-};
-Material redRubber {
-    glm::vec3(0.05,       0.0,        0.0),
-    glm::vec3(0.5,        0.4,        0.4),
-    glm::vec3(0.7,        0.04,       0.04),
-    10.0
-};
-Material greenRubber {
-    glm::vec3(0.0,        0.05,       0.0),
-    glm::vec3(0.4,        0.5,        0.4),
-    glm::vec3(0.04,       0.7,        0.04),
-    10.0
-};
-vector<Material> materials = { gold, bronze, cyanPlastic, redRubber, greenRubber };
 
 int SCR_WIDTH = 800;
 int SCR_HEIGHT = 600;
 int windowW, windowH;
 
+float currentTime = 0.0f;
 float deltaTime = 0.0f;
 float lastTime = 0.0f;
+
+double renderTime = 0.0f;
+int renderCount = 0;
 
 // ---- CAMERA ----
 glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 20.0f);
@@ -139,8 +101,10 @@ int main()
     glEnableVertexAttribArray(1);
     
     basicShader.use();
+    basicShader.setFloat3("lightAmbient", glm::vec3(0.2f));
+    basicShader.setFloat3("lightDiffuse", glm::vec3(1.0f));
+    basicShader.setFloat3("lightSpecular", glm::vec3(1.0f));
     basicShader.setFloat3("lightDirection", glm::vec3(-1.0f));
-    basicShader.setFloat3("lightColor", glm::vec3(1.0f));
     
     // ---- RENDER LOOP ----
     
@@ -154,12 +118,12 @@ int main()
         view = glm::translate(view, -cameraPosition);
         basicShader.setMat4("view", view);
         glm::mat4 projection = glm::mat4(1.0f);
-        projection = glm::perspective(glm::radians(45.0f), (float)windowW/(float)windowH, 0.1f, 100.0f);
+        projection = glm::perspective(glm::radians(45.0f), (float)windowW/(float)windowH, 1.0f, 4500.0f);
         basicShader.setMat4("projection", projection);
         basicShader.setFloat3("cameraPos", cameraPosition);
         
         glBindVertexArray(teapotVAO);
-        for (int i = 0; i < objPositions.size(); i++)
+        for (int i = 0; i < scene.size(); i++)
         {
             int imat = i%materials.size();
             basicShader.setFloat3("material.ambient", materials[imat].ambient);
@@ -168,9 +132,22 @@ int main()
             basicShader.setFloat("material.shininess", materials[imat].shininess);
             
             glm::mat4 teapotModel = glm::mat4(1.0f);
-            teapotModel = glm::translate(teapotModel, objPositions[i]);
+            teapotModel = glm::translate(teapotModel, scene[i]);
             basicShader.setMat4("model", teapotModel);
             glDrawArrays(GL_TRIANGLES, 0, modelVertices.size()/6);
+        }
+        
+        currentTime = glfwGetTime();
+        deltaTime = currentTime - lastTime;
+        lastTime = currentTime;
+        
+        renderCount++;
+        renderTime += deltaTime;
+        // Log
+        if (renderCount == 600)
+        {
+            std::cout << "Render Time médio: " << renderTime/renderCount << std::endl;
+            std::cout << "Current Time: " << currentTime << std::endl;
         }
         
         glfwSwapBuffers(window);

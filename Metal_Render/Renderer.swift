@@ -22,43 +22,18 @@ class Renderer: NSObject {
     var modelLoader: ModelLoader_Wrapper
     
     var cameraPosition = float3(0,0,20);
-    var time: Float = 0
-    
-    var objPositions: [float3] = [
-        [0,0,-5],
-        [8,0,-7],
-        [-8,2,0],
-        [0,-6,1],
-        [-1,-2,4],
-    ]
+    var time: Double = 0
     
     let viewMtx: float4x4
     let aspect: Float
     let projMtx: float4x4
     var lighting: Lighting
     
-    // Material values from: http://www.it.hiof.no/~borres/j3d/explain/light/p-materials.html
-    var gold = Material(ambient: [0.2125, 0.1275, 0.054],
-                        diffuse: [0.75164, 0.60648, 0.22648],
-                        specular: [0.628281, 0.555802, 0.366065],
-                        shininess: 51.2)
-    var bronze = Material(ambient: [0.2125, 0.1275, 0.054],
-                          diffuse: [0.714, 0.4284, 0.18144],
-                          specular: [0.393548, 0.271906, 0.166721],
-                          shininess: 25.6)
-    var cyanPlastic = Material(ambient: [0.0, 0.1, 0.06],
-                               diffuse: [0.0, 0.50980392, 0.50980392],
-                               specular: [0.50196078, 0.50196078, 0.50196078],
-                               shininess: 32.0)
-    var redRubber = Material(ambient: [0.05, 0.0, 0.0],
-                             diffuse: [0.5, 0.4, 0.4],
-                             specular: [0.7, 0.04, 0.04],
-                             shininess: 10.0)
-    var greenRubber = Material(ambient: [0.0, 0.05, 0.0],
-                               diffuse: [0.4, 0.5, 0.4],
-                               specular: [0.04, 0.7, 0.04],
-                               shininess: 10.0)
-    lazy var materials: [Material] = [gold, bronze, cyanPlastic, redRubber, greenRubber]
+    var scene: [float3]
+    
+    //logging variables
+    var renderTime: Double = 0.0
+    var frameCount: Int = 0
     
     init?(mtkView: MTKView){
         // View and Device
@@ -98,12 +73,12 @@ class Renderer: NSObject {
         // Permanent Setup
         viewMtx = float4x4(translationBy: -cameraPosition)
         aspect = Float(view.drawableSize.width / view.drawableSize.height)
-        projMtx = float4x4(perspectiveProjectionFov: (Float.pi)/4, aspectRatio: aspect, nearZ: 0.1, farZ: 100)
-        lighting = Lighting(direction: [-1,-1,-1], color: [1,1,1], camPos: cameraPosition)
+        projMtx = float4x4(perspectiveProjectionFov: (Float.pi)/4, aspectRatio: aspect, nearZ: 1, farZ: 4500)
+        lighting = Lighting(ambient: [0.2,0.2,0.2], diffuse: [1,1,1], specular: [1,1,1], direction: [-1,-1,-1], camPos: cameraPosition)
         
+        // Chose the scene here (scene[1...5])
+        scene = scene4
         super.init()
-        
-        
     }
     
     static func buildVertexDescriptor() -> MTLVertexDescriptor {
@@ -155,6 +130,7 @@ class Renderer: NSObject {
 extension Renderer: MTKViewDelegate {
     
     func draw(in view: MTKView) {
+        
         guard let commandBuffer = commandQueue.makeCommandBuffer(),
         let renderPassDescriptor = view.currentRenderPassDescriptor else {
             print("Unable to get resources for rendering.")
@@ -163,7 +139,18 @@ extension Renderer: MTKViewDelegate {
     
         // Clear Background
         renderPassDescriptor.colorAttachments[0].clearColor = .init(red: 0.1, green: 0.2, blue: 0.4, alpha: 1.0)
-        
+        commandBuffer.addCompletedHandler { (cmdbuff) in
+            let duration = cmdbuff.gpuEndTime - cmdbuff.gpuStartTime
+            if duration == 0 { return }
+            self.frameCount += 1
+            self.renderTime += duration
+            
+            // Log
+            if self.frameCount == 600 {
+                let meanRenderTime = self.renderTime/Double(self.frameCount)
+                print("Render Time médio: \(meanRenderTime)")
+            }
+        }
         if let commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {
             
             // Scene setup (render loop)
@@ -175,10 +162,11 @@ extension Renderer: MTKViewDelegate {
             commandEncoder.setFragmentBytes(&lighting, length: MemoryLayout<Lighting>.stride, index: 1)
             commandEncoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
             
-            for i in 0..<objPositions.count {
-                var modelMtx = float4x4(translationBy: objPositions[i])
+            for i in 0..<scene.count {
+                var imat = i%materials.count
+                var modelMtx = float4x4(translationBy: scene[i])
                 var uniforms = Uniforms(model: modelMtx, view: viewMtx, projection: projMtx)
-                var material = Material(ambient: materials[i].ambient, diffuse: materials[i].diffuse, specular: materials[i].specular, shininess: materials[i].shininess)
+                var material = Material(ambient: materials[imat].ambient, diffuse: materials[imat].diffuse, specular: materials[imat].specular, shininess: materials[imat].shininess)
                 commandEncoder.setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.stride, index: 1)
                 commandEncoder.setFragmentBytes(&material, length: MemoryLayout<Material>.stride, index: 2)
                 commandEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: modelLoader.vertexCount)

@@ -31,8 +31,10 @@ struct Uniforms
 
 struct Lighting
 {
+    float3 ambient;
+    float3 diffuse;
+    float3 specular;
     float3 direction; // directional light
-    float3 color;
     float3 camPos;
 };
 
@@ -60,18 +62,17 @@ fragment float4 fragment_function(const VertexOut vertexIn [[ stage_in ]],
                                   constant const Material &material [[ buffer(2) ]])
 {
     // iluminação Phong
-    float3 ambient = material.ambient;
+    float3 ambient = material.ambient * lighting.ambient;
     
     float3 lightDir = normalize(lighting.direction);
     float nDotL = max(dot(vertexIn.normal, -lightDir),0.0);
-    float3 diffuse = nDotL * material.diffuse;
+    float3 diffuse = nDotL * material.diffuse * lighting.diffuse;
     
     float3 r = reflect(lightDir, vertexIn.normal);
     float3 camDir = normalize(lighting.camPos - float3(vertexIn.worldPos));
     float vDotR = max(dot(camDir, r),0.0);
-    float3 specular = pow(vDotR, material.shininnes);
-    specular *= material.specular;
+    float3 specular = pow(vDotR, material.shininnes) * material.specular * lighting.specular;
     
-    float3 color = (ambient + diffuse + specular) * lighting.color;
+    float3 color = ambient + diffuse + specular;
     return float4(color, 1.0);
 }

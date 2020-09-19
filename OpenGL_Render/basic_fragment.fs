@@ -8,7 +8,9 @@ out vec4 FragColor;
 uniform vec3 cameraPos;
 
 // Light
-uniform vec3 lightColor;
+uniform vec3 lightAmbient;
+uniform vec3 lightDiffuse;
+uniform vec3 lightSpecular;
 uniform vec3 lightDirection;
 
 // Material
@@ -23,17 +25,17 @@ uniform Material material;
 
 void main()
 {
-    vec3 ambient = material.ambient;
+    vec3 ambient = material.ambient * lightAmbient;
 
     vec3 lightDir = normalize(lightDirection);
     float nDotL = max(dot(Normal, -lightDir), 0.0f);
-    vec3 diffuse = nDotL * material.diffuse;
+    vec3 diffuse = nDotL * material.diffuse * lightDiffuse;
 
     vec3 r = reflect(lightDir, Normal);
     vec3 camDir = normalize(cameraPos - WorldPos);
     float vDotR = max(dot(camDir, r), 0.0f);
-    vec3 specular = pow(vDotR, material.shininess) * material.specular;
+    vec3 specular = pow(vDotR, material.shininess) * material.specular * lightSpecular;
 
-    vec3 color = (ambient + diffuse + specular) * lightColor;
+    vec3 color = ambient + diffuse + specular;
     FragColor = vec4(color, 1.0f);
 }

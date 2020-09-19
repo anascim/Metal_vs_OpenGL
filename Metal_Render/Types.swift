@@ -18,8 +18,10 @@ public struct Uniforms {
 }
 
 struct Lighting {
+    var ambient: SIMD3<Float>
+    var diffuse: SIMD3<Float>
+    var specular: SIMD3<Float>
     var direction: SIMD3<Float>
-    var color: SIMD3<Float>
     var camPos: SIMD3<Float>
 }
 
